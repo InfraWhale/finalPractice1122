@@ -132,7 +132,8 @@
 
 <div class="pop hide">
     <img src="img/b1.png">
-    <h3>ADD CART</h3>
+    <button id="add"><h3 class="no">ADD CART</h3></button>
+    <button id="delete"><h3 class="no2">DELETE CART</h3></button>
 </div>
 
 <div class="container">
@@ -252,7 +253,8 @@
         const targetMenu = menus[idx]
         const targetPicture = targetMenu.picture
         popEle.querySelector("img").setAttribute("src", targetPicture)
-        popEle.querySelector("h3").setAttribute("data-idx", idx)
+        popEle.querySelector(".no").setAttribute("data-idx", idx)
+        popEle.querySelector(".no2").setAttribute("data-idx", idx)
 
 
         popEle.setAttribute("class", "pop show") // class 정보 바꿀때 사용
@@ -263,7 +265,7 @@
         popEle.setAttribute("class", "pop hide")
     },false)
 
-    document.querySelector(".pop h3").addEventListener("click", e => {
+    document.querySelector("#add").addEventListener("click", e => {
         e.stopPropagation()
         e.preventDefault()
 
@@ -272,6 +274,18 @@
         console.log(menu)
 
         addCart(menu)
+
+    }, false)
+
+    document.querySelector("#delete").addEventListener("click", e => {
+        e.stopPropagation()
+        e.preventDefault()
+
+        const target =e.target
+        const menu = menus[target.getAttribute("data-idx")]
+        console.log(menu)
+
+        deleteCart(menu)
 
     }, false)
 
@@ -287,6 +301,28 @@
 
         }else {
             orders.push({...menu, qty:1})
+        }
+
+        console.log(orders)
+        showOrderItems()
+    }
+
+    function deleteCart(menu){
+
+        const result = orders.filter(oi => oi.name === menu.name)
+
+        console.log("-------check result-----------")
+        console.log(result)
+
+        if(result[0].qty > 1){
+            result[0].qty -= 1
+
+        }else {
+            for(let i = 0; i < orders.length; i++) {
+                if(orders[i] === result[0])  {
+                    orders.splice(i, 1);
+                }
+            }
         }
 
         console.log(orders)
